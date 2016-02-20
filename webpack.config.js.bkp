@@ -1,0 +1,42 @@
+const webpack = require('webpack')
+
+const PORT = 1234
+const excludes = /node_modules/
+
+module.exports = {
+  entry: [
+    'webpack-dev-server/?http://localhost:' + PORT,
+    'webpack/hot/dev-server',
+    __dirname + '/src/client/entry.js'
+  ],
+  output: {
+    path: __dirname + '/dist/',
+    filename: 'entry.js'
+  },
+  module: {
+    loaders: [
+      { test: /\.js$/, exclude: excludes, loader: 'babel?presets[]=es2015' },
+      { test: /\.tag$/, exclude: excludes, loader: 'tag' },
+    ]
+  },
+  resolve: {
+    alias: {
+      'views': __dirname + '/src/views'
+    }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      riot: 'riot'
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+    inline: true,
+    progress: true,
+    stats: 'errors-only'
+  },
+  devtool: 'eval',
+  debug: true,
+}
